@@ -5,6 +5,8 @@
  */
 package com.mycompany.autonoleggio;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author ripristino1
@@ -18,8 +20,12 @@ public class Auto
     private String targa;
     private String marca;
     private String modello;
+    private LocalDate inizioNoleggio;
+    private LocalDate fineNoleggio;
+    private boolean consegna=false;
     
-    public Auto(int codiceUnivoco, int codiceFiscale, String cognome, String noe, String targa, String marca, String modello)
+
+    public Auto(int codiceUnivoco, int codiceFiscale, String cognome, String noe, String targa, String marca, String modello,int anno, int mese, int giorno)
     {
         setCodiceUnivoco(codiceUnivoco);
         setCodiceFiscale(codiceFiscale);
@@ -28,6 +34,32 @@ public class Auto
         setTarga(targa);
         setMarca(marca);
         setModello(modello);
+        inizioNoleggio=LocalDate.of(anno, mese, giorno);
+        fineNoleggio=null;
+    }
+    
+    public Auto (Auto a)
+    {
+        codiceFiscale=a.getCodiceFiscale();
+        codiceUnivoco=a.getCodiceUnivoco();
+        cognome=a.getCognome();
+        nome=a.getNome();
+        targa=a.getTarga();
+        marca=a.getMarca();
+        modello=a.getModello();
+    }
+    
+    public Auto()
+    {
+        this.codiceFiscale=0;
+        this.codiceUnivoco=0;
+        this.cognome=null;
+        this.nome=null;
+        this.targa=null;
+        this.marca=null;
+        this.modello=null;
+        inizioNoleggio=null;
+        fineNoleggio=null;
     }
     
     public int getCodiceUnivoco()
@@ -99,4 +131,44 @@ public class Auto
     {
         this.modello=modello;
     }
+
+    public LocalDate getInizioNoleggio() 
+    {
+        return inizioNoleggio;
+    }
+
+    public void setInizioNoleggio(int giorno,int mese, int anno) 
+    {
+        this.inizioNoleggio = LocalDate.of(anno, mese, giorno);
+    }
+
+    public LocalDate getFineNoleggio() 
+    {
+        return fineNoleggio;
+    }
+
+    //return 1 : auto gia consegnata
+    //return 0 : auto riconsegnata
+    public int setFineNoleggio(int giorno,int mese, int anno) 
+    {
+        if(consegna==false)
+        {
+            return 1;
+        }
+        else
+        {
+            this.fineNoleggio = LocalDate.of(anno, mese, giorno);
+            consegna=true;
+            return 0;
+        }
+        
+    }
+
+    @Override
+    public String toString() 
+    {
+        return "Auto{" + " codiceUnivoco=" + getCodiceUnivoco() + ", codiceFiscale=" + getCodiceFiscale() + ", cognome=" + getCognome() + ", nome=" + getNome() + ", targa=" + getTarga() + ", marca=" + getMarca() + ", modello=" + getModello() + '}';
+    }
+    
+    
 }
