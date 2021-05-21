@@ -5,9 +5,16 @@
  */
 package com.mycompany.autonoleggio;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,14 +22,16 @@ import java.util.Scanner;
  */
 public class Main 
 {
-    public static void main(String[] args) 
+    public static void main(String[] args) throws FileException 
     {
         AutoSalone a1= new AutoSalone();
         String[] vociMenu=new String[8];
         Scanner tastiera=new Scanner(System.in);
         int sceltaUtente=0;
         Auto auto;
-        int giorno,mese,anno;
+        String targa;
+        int giorno=0,mese=0,anno=0;
+        LocalDate dataEliminaNoleggio;
     
         vociMenu[0]="Esci";
         vociMenu[1]="Registrare l’inizio di un nuovo noleggio";
@@ -31,7 +40,9 @@ public class Main
         vociMenu[4]="Visualizzare tutte le auto noleggiate da una determinata persona";
         vociMenu[5]="Visualizzare tutti i noleggi relativi ad una delle 10 automobili (inserita dall’utente) in ordine cronologico inverso (dal più recente al più vecchio)";
         vociMenu[6]="Esportare in formato CSV i dati di tutti i noleggi";
-        vociMenu[7]="7.	Salvare i dati su un file binario e caricarli all’ avvio dell’applicazione";
+        vociMenu[7]="Salvare i dati su un file binario";
+        
+        a1.caricaDati();
         
         Menu menu=new Menu(vociMenu);
         
@@ -57,6 +68,8 @@ public class Main
                     System.out.println("CodiceFiscale-->");
                     auto.setCodiceFiscale(tastiera.nextInt());
                     
+                    tastiera.nextLine();
+                    
                     System.out.println("Cognome-->");
                     auto.setCognome(tastiera.nextLine());
                     
@@ -78,7 +91,14 @@ public class Main
                     mese=tastiera.nextInt();
                     System.out.println("Anno-->");
                     anno=tastiera.nextInt();
-                    auto.setInizioNoleggio(giorno,mese,anno);
+                    try
+                    {
+                        auto.setInizioNoleggio(giorno,mese,anno);
+                    }
+                    catch(DateTimeException d1)
+                    {
+                        System.out.println("Inserimento data di inizio errato");
+                    }
                     
                     a1.nuovoNoleggio(auto);
                     
@@ -120,30 +140,99 @@ public class Main
                 }
                 case 3:
                 {
+                    System.out.println("Inserisci la data e la targa dell'auto da eliminare");
+                    System.out.println("Giorno-->");
+                    giorno=tastiera.nextInt();
+                    System.out.println("Mese-->");
+                    mese=tastiera.nextInt();
+                    System.out.println("Anno-->");
+                    anno=tastiera.nextInt();
+                    
+                    tastiera.nextLine();
+                    
+                    System.out.println("Targa-->");
+                    targa=tastiera.nextLine();
+                    
+                    dataEliminaNoleggio=LocalDate.of(anno,mese,giorno);
+                    a1.eliminaNoleggio(dataEliminaNoleggio,targa);
+                    
                     System.out.println("premi un pulsante per continuare");
                     tastiera.nextLine();
                     break;
                 }
                 case 4:
                 {
+                    String nome,cognome;
+                    System.out.println("Inserisci nome e cognome: ");
+                    
+                    System.out.println("Nome-->");
+                    nome=tastiera.nextLine();
+                    
+                    System.out.println("Cognome-->");
+                    cognome=tastiera.nextLine();
+                    
+                    a1.visualizzaAutoDiUnaPersona(nome,cognome);
+                    
                     System.out.println("premi un pulsante per continuare");
                     tastiera.nextLine();
                     break;
                 }
                 case 5:
                 {
+                    Auto[] a2;
+ 
+                    System.out.println("Inserisci la targa dell'auto");
+                    
+                    System.out.println("Targa-->");
+                    targa=tastiera.nextLine();
+                    
+                    
+                    a2=a1.visualizzaNoleggiDiUnaAutoInverso(targa);
+                    
+                    for(int i=0;i<a2.length;i++)
+                    {
+                        if(a2[i]==null)
+                        {
+                            System.out.println("targa errata");
+                            break;
+                        }
+                        System.out.println(a2[i]);
+                    }
+                    
+                    tastiera.nextLine();
                     System.out.println("premi un pulsante per continuare");
                     tastiera.nextLine();
                     break;
                 }
                 case 6:
                 {
+                    
+                    try
+                    {
+                        a1.esportaInCSV();
+                    }
+                    catch(IOException e1)
+                    {
+                        System.out.println("Impossibile accedere al file, i libri non sono stati salvati");
+                    }
+                   
+
                     System.out.println("premi un pulsante per continuare");
                     tastiera.nextLine();
                     break;
                 }
                 case 7:
                 {
+                    try
+                    {
+                        a1.salvaDati();
+                        System.out.println("salvataggio avvenuto correttamente");
+                    }
+                    catch(IOException e5)
+                    {
+                        System.out.println("impossibile accedere al file binario, le revisioni non sono state salvate");
+                    }
+
                     System.out.println("premi un pulsante per continuare");
                     tastiera.nextLine();
                     break;
