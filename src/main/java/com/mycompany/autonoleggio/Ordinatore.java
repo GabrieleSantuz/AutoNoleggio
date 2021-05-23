@@ -10,9 +10,7 @@ package com.mycompany.autonoleggio;
  * @author pc hp
  */
 public class Ordinatore 
-{
-    
-    
+{ 
      //scambia array di stringhe
     public static void scambia(String v[],int posizione1, int posizione2)
     {

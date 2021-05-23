@@ -174,7 +174,7 @@ public class AutoSalone implements Serializable
      */
     public void esportaInCSV()throws IOException,FileException
     {
-        TextFile f1=new TextFile("Salvataggio.txt",'W',true);
+        TextFile f1=new TextFile("Salvataggio.txt",'W');
 
         for(int i=0;i<getContaAutoAggiunte();i++)
         {
@@ -191,7 +191,7 @@ public class AutoSalone implements Serializable
      * @throws FileNotFoundException
      * @throws IOException 
      */
-    public void salvaDati() throws FileNotFoundException, IOException
+    public void salvaDati() throws FileNotFoundException, IOException, FileException
     {
        
         FileOutputStream f1=new FileOutputStream("Bin/ Auto.bin");
@@ -200,34 +200,6 @@ public class AutoSalone implements Serializable
         writer.flush();
         writer.close();          
                 
-    }
-    
-    /**
-     * Carica i dati nel progetto
-     */
-    public void caricaDati()
-    {
-        try
-        {
-            FileInputStream f1=new FileInputStream("Bin/ Auto.bin");
-            ObjectInputStream reader=new ObjectInputStream(f1);
-            try
-            {  
-                auto=(Auto[])reader.readObject();
-                reader.close();
-                System.out.println("Lettura da file avvevuta correttamente");
-
-            }
-            catch(ClassNotFoundException ex)
-            {
-                reader.close();
-                System.out.println("\nErrore nella lettura");
-            }
-        }
-        catch(IOException ex)
-        {
-            System.out.println("\nImpossibile accedere al file");
-        }
     }
     
     /**

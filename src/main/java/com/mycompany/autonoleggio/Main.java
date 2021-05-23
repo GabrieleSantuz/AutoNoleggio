@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -20,10 +21,10 @@ import java.util.logging.Logger;
  *
  * @author ripristino1
  */
-public class Main 
+public class Main implements Serializable
 {
-    public static void main(String[] args) throws FileException 
-    {
+    public static void main (String[] args)
+    {        
         AutoSalone a1= new AutoSalone();
         String[] vociMenu=new String[8];
         Scanner tastiera=new Scanner(System.in);
@@ -42,7 +43,27 @@ public class Main
         vociMenu[6]="Esportare in formato CSV i dati di tutti i noleggi";
         vociMenu[7]="Salvare i dati su un file binario";
         
-        a1.caricaDati();
+        try
+        {
+            FileInputStream f1=new FileInputStream("Bin/ Auto.bin");
+            ObjectInputStream reader=new ObjectInputStream(f1);
+            try
+            {
+                a1=(AutoSalone)reader.readObject();
+                reader.close();
+                System.out.println("\nLettura da file avvevuta correttamente");
+
+            }
+            catch(ClassNotFoundException ex)
+            {
+                reader.close();
+                System.out.println("\nErrore nella lettura");
+            }
+        }
+        catch(IOException ex)
+        {
+            System.out.println("\nImpossibile accedere al file");
+        }
         
         Menu menu=new Menu(vociMenu);
         
@@ -215,6 +236,10 @@ public class Main
                     {
                         System.out.println("Impossibile accedere al file, i libri non sono stati salvati");
                     }
+                    catch(FileException e2)
+                    {
+                        System.out.println("");
+                    }
                    
 
                     System.out.println("premi un pulsante per continuare");
@@ -231,6 +256,11 @@ public class Main
                     catch(IOException e5)
                     {
                         System.out.println("impossibile accedere al file binario, le revisioni non sono state salvate");
+                    }
+                    
+                    catch(FileException e9)
+                    {
+                        System.out.println("");
                     }
 
                     System.out.println("premi un pulsante per continuare");
