@@ -87,7 +87,7 @@ public class Main implements Serializable
                     auto.setCodiceUnivoco(tastiera.nextInt());
                     
                     System.out.println("CodiceFiscale-->");
-                    auto.setCodiceFiscale(tastiera.nextInt());
+                    auto.setCodiceFiscale(tastiera.nextLine());
                     
                     tastiera.nextLine();
                     

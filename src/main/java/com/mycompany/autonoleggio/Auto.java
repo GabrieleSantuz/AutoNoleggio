@@ -15,8 +15,11 @@ import java.time.LocalDate;
  */
 public class Auto implements Serializable
 {
+    
+      
+     
     private int codiceUnivoco;
-    private int codiceFiscale;
+    private String codiceFiscale;
     private String cognome;
     private String nome; 
     private String targa;
@@ -39,7 +42,7 @@ public class Auto implements Serializable
      * @param mese il mese dell'inizio del noleggio
      * @param giorno il giorno dell'inizio del noleggio
      */
-    public Auto(int codiceUnivoco, int codiceFiscale, String cognome, String nome, String targa, String marca, String modello,int anno, int mese, int giorno)
+    public Auto(int codiceUnivoco, String codiceFiscale, String cognome, String nome, String targa, String marca, String modello,int anno, int mese, int giorno)
     {
         setCodiceUnivoco(codiceUnivoco);
         setCodiceFiscale(codiceFiscale);
@@ -73,7 +76,7 @@ public class Auto implements Serializable
      */
     public Auto()
     {
-        this.codiceFiscale=0;
+        this.codiceFiscale=null;
         this.codiceUnivoco=0;
         this.cognome=null;
         this.nome=null;
@@ -106,7 +109,7 @@ public class Auto implements Serializable
      * Restituisce il codice fiscale della persona che noleggia l'auto
      * @return il codice fiscale
      */
-    public int getCodiceFiscale()
+    public String getCodiceFiscale()
     {
         return codiceFiscale;
     }
@@ -115,7 +118,7 @@ public class Auto implements Serializable
      * Definisce il codice fiscale della persona che vuole noleggiare un auto
      * @param codiceFiscale è il codice fiscale inserito dall'utente
      */
-    public void setCodiceFiscale(int codiceFiscale)
+    public void setCodiceFiscale(String codiceFiscale)
     {
         this.codiceFiscale=codiceFiscale;
     }
